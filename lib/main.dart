@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,21 +16,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
@@ -37,45 +24,81 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends HookConsumerWidget {
   const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    // build メソッド内でフックを使用できます。
+    var stateRes = useState("");
+    var statePrompt = useState("");
+    var numberTagText = useState(1);
+    const borderSide = BorderSide(
+      color: Colors.black,
+      width: 1,
+    );
 
-class _MyHomePageState extends State<MyHomePage> {
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Text(title),
       ),
       body: Center(
-        child: TextButton(
-          onPressed: () async {
-            final model = GenerativeModel(model: 'gemini-pro', apiKey: 'AIzaSyAf1W8FBIEIL_VT2VJrWyqdB8l7WCYSRL4');
-            const prompt = 'なにか喋って';
-            final response =
-                await model.generateContent([Content.text(prompt)]);
-            debugPrint(response.text);
-          },
-          child: const Text('Generate'),
+        child: Column(
+          children: <Widget>[
+            Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              height: MediaQuery.of(context).size.height * 0.3,
+              decoration: const BoxDecoration(
+                border: Border(
+                  left: borderSide,
+                  top: borderSide,
+                  right: borderSide,
+                  bottom: borderSide,
+                ),
+              ),
+              child: SingleChildScrollView(
+                  child: _TagText(
+                number: numberTagText.value,
+              )),
+            ),
+            TextButton(
+              onPressed: () {
+                numberTagText.value++;
+              },
+              child: const Text('+'),
+            ),
+            TextButton(
+              onPressed: () async {
+                final model = GenerativeModel(
+                    model: 'gemini-pro',
+                    apiKey: 'AIzaSyAf1W8FBIEIL_VT2VJrWyqdB8l7WCYSRL4');
+                statePrompt.value = 'なにか喋って';
+                final response = await model
+                    .generateContent([Content.text(statePrompt.value)]);
+                stateRes.value = response.text ?? "";
+              },
+              child: const Text('Generate'),
+            ),
+            Text(stateRes.value),
+          ],
         ),
       ),
+    );
+  }
+}
+
+class _TagText extends StatelessWidget {
+  const _TagText({required this.number});
+  final int number;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        for (int i = 0; i < number; i++) ...{const TextField()}
+      ],
     );
   }
 }
