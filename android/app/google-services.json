@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "318379171386",
+    "project_id": "feel-free-bizmail",
+    "storage_bucket": "feel-free-bizmail.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:318379171386:android:b16132be2ec7fa32e3df03",
+        "android_client_info": {
+          "package_name": "com.example.feel_free_bizmail"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDW2U1HUoy3rrSnRIENtyh1E0Gijp_hB6s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
