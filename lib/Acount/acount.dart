@@ -66,7 +66,8 @@ class AcountPage extends HookConsumerWidget {
                       }
                     } catch (e) {
                       // ユーザー登録に失敗した場合
-                      stateInfomag.value = "登録に失敗しました：${e.toString()}";
+                      stateInfomag.value = "登録に失敗しました。";
+                      debugPrint(e.toString());
                     }
                   },
                 ),
@@ -98,7 +99,8 @@ class AcountPage extends HookConsumerWidget {
                         );
                       }
                     } catch (e) {
-                      stateInfomag.value = "ログインに失敗しました：${e.toString()}";
+                      stateInfomag.value = "ログインに失敗しました。";
+                      debugPrint(e.toString());
                     }
                   },
                 ),
