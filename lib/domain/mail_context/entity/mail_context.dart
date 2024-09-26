@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:feel_free_bizmail/Acount/domain/user.dart';
-import 'package:feel_free_bizmail/tag/domain/tag.dart';
+import 'package:feel_free_bizmail/domain/user/entity/user.dart';
+import 'package:feel_free_bizmail/domain/tag/entity/tag.dart';
 
 part 'mail_context.freezed.dart';
 

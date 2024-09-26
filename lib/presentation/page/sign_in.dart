@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:feel_free_bizmail/format/format.dart';
+import 'package:feel_free_bizmail/presentation/page/create_mail_context.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class AcountPage extends HookConsumerWidget {
-  const AcountPage({super.key, required this.title});
+class SignInPage extends HookConsumerWidget {
+  const SignInPage({super.key, required this.title});
   final String title;
 
   @override
@@ -58,7 +58,7 @@ class AcountPage extends HookConsumerWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const FormatPage(
+                            builder: (context) => const CreateMailContextPage(
                               title: 'Feel free Bizmail',
                             ),
                           ),
@@ -92,7 +92,7 @@ class AcountPage extends HookConsumerWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const FormatPage(
+                            builder: (context) => const CreateMailContextPage(
                               title: 'Feel free Bizmail',
                             ),
                           ),

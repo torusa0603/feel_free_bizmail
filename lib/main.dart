@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:feel_free_bizmail/Acount/acount.dart';
+import 'package:feel_free_bizmail/presentation/page/sign_in.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 //使用Widgetの先祖にProviderScopeを配置する
@@ -24,7 +24,7 @@ class MyApp extends ConsumerWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const AcountPage(title: 'Feel free Bizmail'),
+      home: const SignInPage(title: 'Feel free Bizmail'),
     );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:feel_free_bizmail/Acount/domain/user.dart';
+import 'package:feel_free_bizmail/domain/user/entity/user.dart';
 
 part 'tag.freezed.dart';
 

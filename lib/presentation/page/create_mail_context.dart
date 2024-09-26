@@ -3,8 +3,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class FormatPage extends HookConsumerWidget {
-  const FormatPage({super.key, required this.title});
+class CreateMailContextPage extends HookConsumerWidget {
+  const CreateMailContextPage({super.key, required this.title});
   final String title;
 
   @override
