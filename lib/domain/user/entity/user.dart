@@ -7,7 +7,5 @@ class User with _$User {
   const factory User({
     required String id,
     required String userName,
-    required String email,
-    required String password,
   }) = _User;
 }

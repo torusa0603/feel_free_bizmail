@@ -18,8 +18,6 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$User {
   String get id => throw _privateConstructorUsedError;
   String get userName => throw _privateConstructorUsedError;
-  String get email => throw _privateConstructorUsedError;
-  String get password => throw _privateConstructorUsedError;
 
   /// Create a copy of User
   /// with the given fields replaced by the non-null parameter values.
@@ -32,7 +30,7 @@ abstract class $UserCopyWith<$Res> {
   factory $UserCopyWith(User value, $Res Function(User) then) =
       _$UserCopyWithImpl<$Res, User>;
   @useResult
-  $Res call({String id, String userName, String email, String password});
+  $Res call({String id, String userName});
 }
 
 /// @nodoc
@@ -52,8 +50,6 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
   $Res call({
     Object? id = null,
     Object? userName = null,
-    Object? email = null,
-    Object? password = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -63,14 +59,6 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
       userName: null == userName
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
-              as String,
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      password: null == password
-          ? _value.password
-          : password // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -83,7 +71,7 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
       __$$UserImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, String userName, String email, String password});
+  $Res call({String id, String userName});
 }
 
 /// @nodoc
@@ -100,8 +88,6 @@ class __$$UserImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? userName = null,
-    Object? email = null,
-    Object? password = null,
   }) {
     return _then(_$UserImpl(
       id: null == id
@@ -112,14 +98,6 @@ class __$$UserImplCopyWithImpl<$Res>
           ? _value.userName
           : userName // ignore: cast_nullable_to_non_nullable
               as String,
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      password: null == password
-          ? _value.password
-          : password // ignore: cast_nullable_to_non_nullable
-              as String,
     ));
   }
 }
@@ -127,24 +105,16 @@ class __$$UserImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$UserImpl implements _User {
-  const _$UserImpl(
-      {required this.id,
-      required this.userName,
-      required this.email,
-      required this.password});
+  const _$UserImpl({required this.id, required this.userName});
 
   @override
   final String id;
   @override
   final String userName;
-  @override
-  final String email;
-  @override
-  final String password;
 
   @override
   String toString() {
-    return 'User(id: $id, userName: $userName, email: $email, password: $password)';
+    return 'User(id: $id, userName: $userName)';
   }
 
   @override
@@ -154,14 +124,11 @@ class _$UserImpl implements _User {
             other is _$UserImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.userName, userName) ||
-                other.userName == userName) &&
-            (identical(other.email, email) || other.email == email) &&
-            (identical(other.password, password) ||
-                other.password == password));
+                other.userName == userName));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, userName, email, password);
+  int get hashCode => Object.hash(runtimeType, id, userName);
 
   /// Create a copy of User
   /// with the given fields replaced by the non-null parameter values.
@@ -174,19 +141,12 @@ class _$UserImpl implements _User {
 
 abstract class _User implements User {
   const factory _User(
-      {required final String id,
-      required final String userName,
-      required final String email,
-      required final String password}) = _$UserImpl;
+      {required final String id, required final String userName}) = _$UserImpl;
 
   @override
   String get id;
   @override
   String get userName;
-  @override
-  String get email;
-  @override
-  String get password;
 
   /// Create a copy of User
   /// with the given fields replaced by the non-null parameter values.
