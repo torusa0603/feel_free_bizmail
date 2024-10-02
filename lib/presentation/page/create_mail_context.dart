@@ -10,6 +10,7 @@ class CreateMailContextPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // build メソッド内でフックを使用できます。
+    var statePreMailContext = useState("");
     var stateRes = useState("");
     var statePrompt = useState("");
     var numberTagText = useState(1);
@@ -31,6 +32,23 @@ class CreateMailContextPage extends HookConsumerWidget {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  decoration: BoxDecoration(
+                    border: Border.all(),
+                  ),
+                  child: SingleChildScrollView(
+                    child: TextFormField(
+                      decoration: const InputDecoration(labelText: '前回メール内容'),
+                      obscureText: true,
+                      controller: TextEditingController(
+                          text: statePreMailContext.value),
+                      onChanged: (String value) {
+                        statePreMailContext.value = value;
+                      },
+                    ),
+                  ),
+                ),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.8,
                   height: MediaQuery.of(context).size.height * 0.3,
@@ -67,10 +85,14 @@ class CreateMailContextPage extends HookConsumerWidget {
                       statePrompt.value += ",";
                     }
                     statePrompt.value += "}";
+                    statePrompt.value += "以前のメール内容も参考して下さい。";
+                    statePrompt.value += "以前のメール内容:";
+                    statePrompt.value += statePreMailContext.value;
                     final response = await model
                         .generateContent([Content.text(statePrompt.value)]);
                     stateRes.value =
-                        "質問文 : ${statePrompt.value}\n\n${response.text ?? ""}";
+                        // "質問文 : ${statePrompt.value}\n\n"
+                        response.text ?? "";
                     statePrompt.value = "";
                   },
                   child: const Text('Generate'),
@@ -85,6 +107,10 @@ class CreateMailContextPage extends HookConsumerWidget {
                       stateRes.value,
                     ),
                   ),
+                ),
+                TextButton(
+                  onPressed: () {},
+                  child: const Text('Save'),
                 ),
               ],
             ),
