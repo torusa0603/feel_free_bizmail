@@ -3,16 +3,42 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:feel_free_bizmail/presentation/page/create_mail_context.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+@immutable
 class SignInPage extends HookConsumerWidget {
   const SignInPage({super.key, required this.title});
   final String title;
+
+  final keyMail = "mail";
+  final keyPassword = "password";
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var stateEmail = useState("");
     var statePassword = useState("");
     var stateInfomag = useState("");
+
+    // prefsを状態として管理
+    var prefsState = useState<SharedPreferences?>(null);
+
+    // 初期処理: useEffectを使って初回描画時に一度だけ処理を行う
+    useEffect(() {
+      Future<void> fetchData() async {
+        // 初期処理 (例えば、プロバイダーの監視やデータ取得)
+        final prefs = await SharedPreferences.getInstance();
+        prefsState.value = prefs;
+        stateEmail.value = prefsState.value!.getString(keyMail) ?? "";
+        debugPrint(stateEmail.value);
+        statePassword.value = prefsState.value!.getString(keyPassword) ?? "";
+        debugPrint(statePassword.value);
+      }
+
+      fetchData();
+
+      // クリーンアップ処理（必要ならここでリソースを解放）
+      return null;
+    }, []);
 
     return Scaffold(
       body: Center(
@@ -24,6 +50,7 @@ class SignInPage extends HookConsumerWidget {
               // メールアドレス入力
               TextFormField(
                   decoration: const InputDecoration(labelText: 'メールアドレス'),
+                  controller: TextEditingController(text: stateEmail.value),
                   onChanged: (String value) {
                     stateEmail.value = value;
                   }),
@@ -31,6 +58,7 @@ class SignInPage extends HookConsumerWidget {
               TextFormField(
                 decoration: const InputDecoration(labelText: 'パスワード'),
                 obscureText: true,
+                controller: TextEditingController(text: statePassword.value),
                 onChanged: (String value) {
                   statePassword.value = value;
                 },
@@ -39,6 +67,46 @@ class SignInPage extends HookConsumerWidget {
                 padding: const EdgeInsets.all(8),
                 // メッセージ表示
                 child: Text(stateInfomag.value),
+              ),
+              SizedBox(
+                width: double.infinity,
+                // ログイン登録ボタン
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.black,
+                    shape: const StadiumBorder(),
+                    side: const BorderSide(color: Colors.green),
+                  ),
+                  onPressed: () async {
+                    try {
+                      // メール/パスワードでログイン
+                      final FirebaseAuth auth = FirebaseAuth.instance;
+                      await auth.signInWithEmailAndPassword(
+                        email: stateEmail.value,
+                        password: statePassword.value,
+                      );
+                      // ログインに成功した場合
+                      // チャット画面に遷移＋ログイン画面を破棄
+                      if (context.mounted) {
+                        prefsState.value!.setString(keyMail, stateEmail.value);
+                        prefsState.value!
+                            .setString(keyPassword, statePassword.value);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CreateMailContextPage(
+                              title: 'Feel free Bizmail',
+                            ),
+                          ),
+                        );
+                      }
+                    } catch (e) {
+                      stateInfomag.value = "ログインに失敗しました。";
+                      debugPrint(e.toString());
+                    }
+                  },
+                  child: const Text('ログイン'),
+                ),
               ),
               SizedBox(
                 width: double.infinity,
@@ -73,38 +141,6 @@ class SignInPage extends HookConsumerWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                // ログイン登録ボタン
-                child: OutlinedButton(
-                  child: const Text('ログイン'),
-                  onPressed: () async {
-                    try {
-                      // メール/パスワードでログイン
-                      final FirebaseAuth auth = FirebaseAuth.instance;
-                      await auth.signInWithEmailAndPassword(
-                        email: stateEmail.value,
-                        password: statePassword.value,
-                      );
-                      // ログインに成功した場合
-                      // チャット画面に遷移＋ログイン画面を破棄
-                      if (context.mounted) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const CreateMailContextPage(
-                              title: 'Feel free Bizmail',
-                            ),
-                          ),
-                        );
-                      }
-                    } catch (e) {
-                      stateInfomag.value = "ログインに失敗しました。";
-                      debugPrint(e.toString());
-                    }
-                  },
-                ),
-              ),
             ],
           ),
         ),
