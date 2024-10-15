@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:feel_free_bizmail/format/format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:feel_free_bizmail/common/color_stule.dart';
 
 class AcountPage extends HookConsumerWidget {
   const AcountPage({super.key, required this.title});
@@ -15,6 +16,7 @@ class AcountPage extends HookConsumerWidget {
     var stateInfomag = useState("");
 
     return Scaffold(
+      backgroundColor: blueTheme.colorScheme.surface,
       body: Center(
         child: Container(
           padding: const EdgeInsets.all(24),
@@ -23,13 +25,29 @@ class AcountPage extends HookConsumerWidget {
             children: <Widget>[
               // メールアドレス入力
               TextFormField(
-                  decoration: const InputDecoration(labelText: 'メールアドレス'),
+                  decoration: InputDecoration(
+                    labelText: 'メールアドレス',
+                    border: const OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: blueTheme.primaryColor,
+                      ),
+                    ),
+                  ),
                   onChanged: (String value) {
                     stateEmail.value = value;
                   }),
               // パスワード入力
               TextFormField(
-                decoration: const InputDecoration(labelText: 'パスワード'),
+                decoration: InputDecoration(
+                  labelText: 'パスワード',
+                  border: const OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: blueTheme.primaryColor,
+                    ),
+                  ),
+                ),
                 obscureText: true,
                 onChanged: (String value) {
                   statePassword.value = value;
