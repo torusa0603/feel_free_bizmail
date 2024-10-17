@@ -1,14 +1,27 @@
+import 'dart:io';
+
+import 'package:feel_free_bizmail/domain/user/user_repository.dart';
+import 'package:feel_free_bizmail/infrastructure/mock/mock_user_repository.dart';
+import 'package:feel_free_bizmail/infrastructure/remote/remote_user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:feel_free_bizmail/presentation/page/sign_in.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 //使用Widgetの先祖にProviderScopeを配置する
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); // Firebaseをここで初期化
+
+  UserRepository userRepository;
+  if (Platform.isAndroid) {
+    userRepository = await RemoteUserRepository.create();
+  } else {
+    userRepository = MockUserRepository(); // テスト用のリポジトリ
+  }
+
   runApp(
-    const ProviderScope(child: MyApp()),
+    ProviderScope(overrides: [
+      userRepositoryProvider.overrideWithValue(userRepository),
+    ], child: const MyApp()),
   );
 }
 

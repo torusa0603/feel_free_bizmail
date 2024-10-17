@@ -4,8 +4,15 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:feel_free_bizmail/domain/user/entity/user.dart';
 import 'package:feel_free_bizmail/domain/user/user_repository.dart';
 import 'package:feel_free_bizmail/domain/app_exception.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class RemoteUserRepository implements UserRepository {
+  // 非同期処理を行う factory コンストラクタ
+  static Future<RemoteUserRepository> create() async {
+    await Firebase.initializeApp(); // Firebaseをここで初期化
+    return RemoteUserRepository();
+  }
+
   @override
   Future<User> signIn({required String email, required String password}) async {
     try {
@@ -23,7 +30,7 @@ class RemoteUserRepository implements UserRepository {
       );
     } catch (e) {
       // ユーザー登録に失敗した場合
-      rethrow;
+      throw const AppException('サインインに失敗しました。');
     }
   }
 
@@ -40,7 +47,7 @@ class RemoteUserRepository implements UserRepository {
       return ret.user!.uid;
     } catch (e) {
       // ユーザー登録に失敗した場合
-      rethrow;
+      throw const AppException('サインアップに失敗しました。');
     }
   }
 

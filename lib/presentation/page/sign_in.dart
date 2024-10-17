@@ -1,8 +1,8 @@
+import 'package:feel_free_bizmail/domain/user/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:feel_free_bizmail/presentation/page/create_mail_context.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 @immutable
@@ -18,6 +18,7 @@ class SignInPage extends HookConsumerWidget {
     var stateEmail = useState("");
     var statePassword = useState("");
     var stateInfomag = useState("");
+    final userRepository = ref.watch(userRepositoryProvider);
 
     // prefsを状態として管理
     var prefsState = useState<SharedPreferences?>(null);
@@ -79,9 +80,7 @@ class SignInPage extends HookConsumerWidget {
                   ),
                   onPressed: () async {
                     try {
-                      // メール/パスワードでログイン
-                      final FirebaseAuth auth = FirebaseAuth.instance;
-                      await auth.signInWithEmailAndPassword(
+                      await userRepository.signIn(
                         email: stateEmail.value,
                         password: statePassword.value,
                       );
@@ -115,14 +114,15 @@ class SignInPage extends HookConsumerWidget {
                   child: const Text('ユーザー登録'),
                   onPressed: () async {
                     try {
-                      // メール/パスワードでユーザー登録
-                      final FirebaseAuth auth = FirebaseAuth.instance;
-                      await auth.createUserWithEmailAndPassword(
+                      await userRepository.signUp(
                         email: stateEmail.value,
                         password: statePassword.value,
                       );
                       // ユーザー登録に成功した場合
                       if (context.mounted) {
+                        prefsState.value!.setString(keyMail, stateEmail.value);
+                        prefsState.value!
+                            .setString(keyPassword, statePassword.value);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
